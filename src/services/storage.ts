@@ -40,3 +40,7 @@ export async function isPlaceSaved(id: string): Promise<boolean> {
   const items = await getSavedPlaces();
   return items.some((x) => x.id === id);
 }
+
+export async function clearSavedPlaces(): Promise<void> {
+  await AsyncStorage.removeItem('saved_places_v1');
+}
