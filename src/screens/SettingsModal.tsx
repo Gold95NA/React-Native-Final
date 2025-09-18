@@ -1,22 +1,25 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { clearSavedPlaces } from '../services/storage';
 
 export default function SettingsModal() {
-  const [unit, setUnit] = useState<'C' | 'F'>('F');
+  const onClearSaved = async () => {
+    await clearSavedPlaces();
+    Alert.alert('Saved places cleared');
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Temperature unit</Text>
-        <View style={styles.btnRow}>
-          <Pressable onPress={() => setUnit('F')} style={[styles.btn, unit === 'F' && styles.btnActive]}><Text style={[styles.btnText, unit === 'F' && styles.btnTextActive]}>°F</Text></Pressable>
-          <Pressable onPress={() => setUnit('C')} style={[styles.btn, unit === 'C' && styles.btnActive]}><Text style={[styles.btnText, unit === 'C' && styles.btnTextActive]}>°C</Text></Pressable>
-        </View>
+      <View style={styles.section}>
+        <Text style={styles.label}>Data</Text>
+        <Pressable onPress={onClearSaved} style={styles.button}>
+          <Text style={styles.buttonText}>Clear Saved Places</Text>
+        </Pressable>
+        <Text style={styles.help}>
+          This removes all items from the Saved tab on this device.
+        </Text>
       </View>
-
-      <Text style={styles.note}>Modal demonstrates a global route outside the tab stacks.</Text>
     </View>
   );
 }
@@ -24,12 +27,12 @@ export default function SettingsModal() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#fff' },
   title: { fontSize: 22, fontWeight: '800', marginBottom: 12 },
-  row: { marginBottom: 12 },
-  label: { fontSize: 16, fontWeight: '600', marginBottom: 6 },
-  btnRow: { flexDirection: 'row', gap: 10 },
-  btn: { backgroundColor: '#eee', paddingVertical: 8, paddingHorizontal: 14, borderRadius: 8 },
-  btnActive: { backgroundColor: '#111' },
-  btnText: { color: '#111', fontWeight: '700' },
-  btnTextActive: { color: '#fff' },
-  note: { marginTop: 20, color: '#666' }
+
+  section: { marginTop: 4 },
+  label: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
+
+  button: { backgroundColor: '#111', paddingVertical: 12, borderRadius: 10, alignItems: 'center' },
+  buttonText: { color: '#fff', fontWeight: '700' },
+
+  help: { color: '#666', fontSize: 12, marginTop: 8 },
 });
